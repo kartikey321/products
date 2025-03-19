@@ -5,6 +5,7 @@ import 'package:products/utils/extensions.dart';
 import 'package:provider/provider.dart';
 
 class CartScreen extends StatelessWidget {
+  static const String screenName = '/cart-screen';
   const CartScreen({super.key});
   _pay(double price) {
     Fluttertoast.showToast(

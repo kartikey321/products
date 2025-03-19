@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import '../models/product.dart';
 
 class ProductPage extends StatefulWidget {
+  static const String screenName = '/product-screen';
+
   final Product product;
   const ProductPage({super.key, required this.product});
 

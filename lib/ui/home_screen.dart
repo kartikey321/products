@@ -3,12 +3,17 @@ import 'package:products/dataProviders/cart_provider.dart';
 import 'package:products/helpers/categories_helper.dart';
 import 'package:products/helpers/product_helper.dart';
 import 'package:products/models/product.dart';
+import 'package:products/ui/cart_screen.dart';
+import 'package:products/ui/category_page.dart';
+import 'package:products/ui/product_page.dart';
 import 'package:products/ui/widgets/product_item.dart';
 import 'package:provider/provider.dart';
 
 import '../models/category.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const String screenName = '/home-screen';
+
   const HomeScreen({super.key});
 
   @override
@@ -51,6 +56,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Home'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(CartScreen.screenName);
+              },
+              icon: Icon(Icons.shopping_cart))
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -67,18 +82,26 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
                             var item = snapshot.data![index];
-                            return Container(
-                              height: 140,
-                              width: 100,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Expanded(child: Image.network(item.image)),
-                                  SizedBox(
-                                    height: 7,
-                                  ),
-                                  Text(item.name)
-                                ],
+                            return InkWell(
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                    CategoryPage.screenName,
+                                    arguments: {'category': item});
+                              },
+                              child: Container(
+                                height: 140,
+                                width: 100,
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Expanded(child: Image.network(item.image)),
+                                    SizedBox(
+                                      height: 7,
+                                    ),
+                                    Text(item.name)
+                                  ],
+                                ),
                               ),
                             );
                           });
@@ -99,9 +122,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemBuilder: (context, index) {
                           var item = products[index];
 
-                          return ProductItem(
-                            item: item,
-                            addedInCart: prov.productAdded(item.id),
+                          return InkWell(
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                  ProductPage.screenName,
+                                  arguments: {"product": item});
+                            },
+                            child: ProductItem(
+                              item: item,
+                              addedInCart: prov.productAdded(item.id),
+                            ),
                           );
                         });
                   });

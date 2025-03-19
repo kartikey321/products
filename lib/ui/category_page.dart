@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 import '../models/product.dart';
 
 class CategoryPage extends StatefulWidget {
+  static const String screenName = '/category-screen';
+
   final Category category;
   const CategoryPage({super.key, required this.category});
 
