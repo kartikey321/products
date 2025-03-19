@@ -22,5 +22,14 @@ class CartProvider extends ChangeNotifier {
     }
   }
 
-  calculatePrice() {}
+  double calculatePrice() {
+    return _products.map((e) => e.price).fold<double>(0.0, (a, b) => a + b);
+  }
+
+  clearCart() {
+    if (_products.isNotEmpty) {
+      _products.clear();
+      notifyListeners();
+    }
+  }
 }

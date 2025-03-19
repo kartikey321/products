@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-extension IntIndianFormat on int {
+extension IntIndianFormat on double {
   String formatIndianCurrency({int? decimalDigits}) {
     var format = NumberFormat.currency(
       locale: 'en_IN',

@@ -8,7 +8,7 @@ class Product {
   final int id;
   final String title;
   final String slug;
-  final int price;
+  final double price;
   final String description;
   final Category category;
   final List<String> images;
@@ -30,7 +30,7 @@ class Product {
     int? id,
     String? title,
     String? slug,
-    int? price,
+    double? price,
     String? description,
     Category? category,
     List<String>? images,
@@ -69,7 +69,7 @@ class Product {
       id: map['id'].toInt() as int,
       title: map['title'] as String,
       slug: map['slug'] as String,
-      price: map['price'].toInt() as int,
+      price: (map['price'] as num).toDouble(),
       description: map['description'] as String,
       category: Category.fromMap(map['category'] as Map<String, dynamic>),
       images: List<String>.from(
