@@ -8,6 +8,10 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool productAdded(int id) {
+    return _products.indexWhere((e) => e.id == id) != -1;
+  }
+
   List<Product> get products => _products;
 
   removeProduct(int id) {

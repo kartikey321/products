@@ -3,7 +3,7 @@ import 'package:products/dataProviders/cart_provider.dart';
 import 'package:products/helpers/categories_helper.dart';
 import 'package:products/helpers/product_helper.dart';
 import 'package:products/models/product.dart';
-import 'package:products/ui/widgets/carousel.dart';
+import 'package:products/ui/widgets/product_item.dart';
 import 'package:provider/provider.dart';
 
 import '../models/category.dart';
@@ -16,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late List<Product> _products = [];
+  late ValueNotifier<List<Product>> _products = ValueNotifier([]);
   late Future<List<Category>?> getCategories;
   // late Future<List<Product>?> getProducts;
   final int _categoriesLimit = 10;
@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .getProducts(_productBatchesCount, _productOffset)
         .then((val) {
       if (val != null) {
-        _products.addAll(val);
+        _products.value += val;
       }
     });
   }
@@ -87,46 +87,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   }),
             ),
             Consumer<CartProvider>(builder: (context, prov, child) {
-              return GridView.builder(
-                  shrinkWrap: true,
-                  itemCount: _products.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, childAspectRatio: (5 / 7)),
-                  itemBuilder: (context, index) {
-                    var item = _products[index];
-                    return Container(
-                      height: 140,
-                      width: 100,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Expanded(
-                              child: Stack(
-                            children: [
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: Container(
-                                  height: 20,
-                                  width: 20,
-                                  child: Icon(
-                                    Icons.add,
-                                    color: Colors.green,
-                                  ),
-                                ),
-                              ),
-                              Positioned.fill(
-                                  child: ImageCarousel(
-                                      key: ValueKey(item.id),
-                                      imageUrls: item.images)),
-                            ],
-                          )),
-                          SizedBox(
-                            height: 7,
-                          ),
-                          Text(item.title)
-                        ],
-                      ),
-                    );
+              return ValueListenableBuilder(
+                  valueListenable: _products,
+                  builder: (context, products, child) {
+                    return GridView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: products.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, childAspectRatio: (5 / 7)),
+                        itemBuilder: (context, index) {
+                          var item = products[index];
+
+                          return ProductItem(
+                            item: item,
+                            addedInCart: prov.productAdded(item.id),
+                          );
+                        });
                   });
             })
           ],
