@@ -2,7 +2,7 @@
 import 'dart:convert';
 
 class Category {
-  String id;
+  int id;
   String name;
   String slug;
   String image;
@@ -18,7 +18,7 @@ class Category {
   });
 
   Category copyWith({
-    String? id,
+    int? id,
     String? name,
     String? slug,
     String? image,
@@ -48,7 +48,7 @@ class Category {
 
   factory Category.fromMap(Map<String, dynamic> map) {
     return Category(
-      id: map['id'] as String,
+      id: map['id'],
       name: map['name'] as String,
       slug: map['slug'] as String,
       image: map['image'] as String,

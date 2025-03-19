@@ -29,6 +29,19 @@ class ProductHelper {
     return null;
   }
 
+  Future<List<Product>?> getProductsByCategoryId(
+      int categoryId, int limit, int offset) async {
+    try {
+      var categoriesJson = await _requestHelper.getRequest(
+          'https://api.escuelajs.co/api/v1/categories/$categoryId/products?limit=$limit&offset=$offset');
+      var catMap = jsonDecode(categoriesJson);
+      return (catMap as List).map((e) => Product.fromMap(e)).toList();
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
   Future<Product?> getSingleProduct(int id) async {
     try {
       var categoriesJson = await _requestHelper
